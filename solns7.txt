@@ -1,0 +1,68 @@
+7. Largest cycle in a tree
+You are given a tree of N nodes and N-1 edges. Now you need to select two nodes a
+and b in the tree such that the cycle that will be formed after adding an edge between
+the two nodes a and b, its length should be maximum. If there are more than one
+possible answer, you can output any of them.
+Input Format
+The first line contains an integer as N input. Next N-1 lines contain a pair of integers
+(a, b) that denote there is an edge between the two nodes a and b in the tree.
+Output Format
+In the output, you need to print two integers separated by space which denote the
+nodes between which you can add the edge so as to maximize the length of the cycle
+in the tree.
+
+#include <bits/stdc++.h>
+ 
+using namespace std;
+ 
+const int N = 1E5 + 5;
+bool vis[N];
+vector<int> tree[N];
+ 
+int start = -1;
+int total = 0;
+ 
+void dfs(int src, int len) {
+    vis[src] = true;
+    if(len > total) {
+        total = len;
+        start = src;
+    }
+    for(auto i : tree[src]) {
+        if(!vis[i])
+            dfs(i, len + 1);
+    }
+    return;
+}
+ 
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int n;
+    cin >> n;
+    int a, b;
+    for(int i = 0; i < n; i ++) {
+        cin >> a >> b;
+        tree[a].push_back(b);
+        tree[b].push_back(a);
+    }
+    dfs(1, 1);
+    cout << start << ' ';
+    total = 0;
+    memset(vis, false, sizeof vis);
+    dfs(start, 1);
+    cout << start;
+    return 0;
+}
+
+INPUT
+7
+1 2
+1 3
+2 4
+2 5
+3 6
+3 7
+
+OUTPUT
+4 6
